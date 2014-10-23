@@ -1,0 +1,21 @@
+# !/usr/bin/python
+
+import os, time, sys
+
+for root, dirs, files in os.walk(r'C:\\', topdown=False):
+    for filename in files:
+        print(os.path.join(root, filename))
+
+        # stat information of file
+        stinfo = os.stat(os.path.join(root, filename))
+        
+        # Using os.stat to recieve atime and mtime of file
+        print ("Create time: %s" %stinfo.st_ctime)
+        print ("Access time: %s" %stinfo.st_atime)
+        print ("Modified time: %s" %stinfo.st_mtime)
+        print ("\n\n\n")
+        
+    for filename in dirs:
+        print(os.path.join(root, filename))
+
+        
