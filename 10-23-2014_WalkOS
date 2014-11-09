@@ -1,21 +1,39 @@
 # !/usr/bin/python
 
-import os, time, sys
+from __future__ import print_function
+import os, time, sys, datetime
 
-for root, dirs, files in os.walk(r'C:\\', topdown=False):
+
+f = open('myfile.txt','w')
+
+#For Windows
+#for root, dirs, files in os.walk(r'C://', topdown=False):
+#For Unix
+for root, dirs, files in os.walk(r'//', topdown=False):
     for filename in files:
         print(os.path.join(root, filename))
+        f.write(os.path.join(root, filename))
+        f.write("\n")
 
         # stat information of file
         stinfo = os.stat(os.path.join(root, filename))
-        
-        # Using os.stat to recieve atime and mtime of file
-        print ("Create time: %s" %stinfo.st_ctime)
-        print ("Access time: %s" %stinfo.st_atime)
-        print ("Modified time: %s" %stinfo.st_mtime)
-        print ("\n\n\n")
-        
-    for filename in dirs:
-        print(os.path.join(root, filename))
+
+        #Modify timestamp string to readable date
+        createTime = datetime.datetime.fromtimestamp(int(stinfo.st_ctime)).strftime('%Y-%m-%d %H:%M:%S')
+        accessTime = datetime.datetime.fromtimestamp(int(stinfo.st_atime)).strftime('%Y-%m-%d %H:%M:%S')
+        modifiedTime = datetime.datetime.fromtimestamp(int(stinfo.st_mtime)).strftime('%Y-%m-%d %H:%M:%S')
 
         
+        # Using os.stat to recieve atime and mtime of file
+        print ("Create time: %s" %createTime)
+        f.write( "Create time: %s\n" %createTime )
+        print ("Access time: %s" %accessTime)
+        f.write( "Access time: %s\n" %accessTime )
+        print ("Modified time: %s" %modifiedTime)
+        f.write( "Modified time: %s\n" %modifiedTime )
+        print ("\n\n\n")
+        f.write("\n\n\n")
+
+    for filename in dirs:
+        print(os.path.join(root, filename))
+f.close()
