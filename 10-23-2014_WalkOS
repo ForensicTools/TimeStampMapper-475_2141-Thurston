@@ -1,39 +1,96 @@
 # !/usr/bin/python
 
+#######################
+##                   ##
+## Will Thurston     ##
+## Time_Stamp_Mapper ##
+##                   ##
+#######################
+
+
 from __future__ import print_function
 import os, time, sys, datetime
 
 
-f = open('myfile.txt','w')
+#Grabs the wanted directory from the user and checks if directory exists
+def get_directory(direcinput='Input a directory path: '):
+    while True:
+        direcpath = input(direcinput)
+        if os.path.isdir(direcpath):
+            return direcpath
+        print('%r is not a directory. Try again.' % direcpath)
 
-#For Windows
-#for root, dirs, files in os.walk(r'C://', topdown=False):
-#For Unix
-for root, dirs, files in os.walk(r'//', topdown=False):
-    for filename in files:
-        print(os.path.join(root, filename))
-        f.write(os.path.join(root, filename))
-        f.write("\n")
 
-        # stat information of file
-        stinfo = os.stat(os.path.join(root, filename))
+#Open the file to write to
+output = open('TimeStampByName.txt','w')
 
-        #Modify timestamp string to readable date
-        createTime = datetime.datetime.fromtimestamp(int(stinfo.st_ctime)).strftime('%Y-%m-%d %H:%M:%S')
-        accessTime = datetime.datetime.fromtimestamp(int(stinfo.st_atime)).strftime('%Y-%m-%d %H:%M:%S')
-        modifiedTime = datetime.datetime.fromtimestamp(int(stinfo.st_mtime)).strftime('%Y-%m-%d %H:%M:%S')
 
-        
-        # Using os.stat to recieve atime and mtime of file
-        print ("Create time: %s" %createTime)
-        f.write( "Create time: %s\n" %createTime )
-        print ("Access time: %s" %accessTime)
-        f.write( "Access time: %s\n" %accessTime )
-        print ("Modified time: %s" %modifiedTime)
-        f.write( "Modified time: %s\n" %modifiedTime )
-        print ("\n\n\n")
-        f.write("\n\n\n")
+choice = input('What would you like to do?\n\n1. Get All Directories\n2. Get Specific Directory\n\nChoice: ')
 
-    for filename in dirs:
-        print(os.path.join(root, filename))
-f.close()
+if choice == '1':
+    #Recursively go through the specified directory
+    for root, dirs, files in os.walk(r'/' , topdown=False):
+        for filename in files:
+            print(os.path.join(root, filename))
+            output.write(os.path.join(root, filename))
+            output.write("\n")
+
+            # stat information of file
+            stinfo = os.stat(os.path.join(root, filename))
+
+            #Modify atime, ctime, and mtime timestamp sting to human-readable date
+            createTime = datetime.datetime.fromtimestamp(int(stinfo.st_ctime)).strftime('%Y-%m-%d %H:%M:%S')
+            accessTime = datetime.datetime.fromtimestamp(int(stinfo.st_atime)).strftime('%Y-%m-%d %H:%M:%S')
+            modifiedTime = datetime.datetime.fromtimestamp(int(stinfo.st_mtime)).strftime('%Y-%m-%d %H:%M:%S')
+
+            
+            # Using os.stat to recieve atime, ctime, and mtime of file and write to the file
+            print ("Create time: %s" %createTime)
+            output.write( "Create time: %s\n" %createTime )
+            print ("Access time: %s" %accessTime)
+            output.write( "Access time: %s\n" %accessTime )
+            print ("Modified time: %s" %modifiedTime)
+            output.write( "Modified time: %s\n" %modifiedTime )
+            print ("\n\n\n")
+            output.write("\n\n\n")
+
+        for filename in dirs:
+            print(os.path.join(root, filename))
+    
+            
+elif choice == '2':
+    #Recursively go through the specified directory
+    for root, dirs, files in os.walk(get_directory() , topdown=False):
+        for filename in files:
+            print(os.path.join(root, filename))
+            output.write(os.path.join(root, filename))
+            output.write("\n")
+
+            # stat information of file
+            stinfo = os.stat(os.path.join(root, filename))
+
+            #Modify atime, ctime, and mtime timestamp sting to human-readable date
+            createTime = datetime.datetime.fromtimestamp(int(stinfo.st_ctime)).strftime('%Y-%m-%d %H:%M:%S')
+            accessTime = datetime.datetime.fromtimestamp(int(stinfo.st_atime)).strftime('%Y-%m-%d %H:%M:%S')
+            modifiedTime = datetime.datetime.fromtimestamp(int(stinfo.st_mtime)).strftime('%Y-%m-%d %H:%M:%S')
+
+            
+            # Using os.stat to recieve atime, ctime, and mtime of file and write to the file
+            print ("Create time: %s" %createTime)
+            output.write( "Create time: %s\n" %createTime )
+            print ("Access time: %s" %accessTime)
+            output.write( "Access time: %s\n" %accessTime )
+            print ("Modified time: %s" %modifiedTime)
+            output.write( "Modified time: %s\n" %modifiedTime )
+            print ("\n\n\n")
+            output.write("\n\n\n")
+
+        for filename in dirs:
+            print(os.path.join(root, filename))
+
+else:
+    print("\n>>>Incorrect option, system exit<<<")
+
+            
+#Close output file       
+output.close()
